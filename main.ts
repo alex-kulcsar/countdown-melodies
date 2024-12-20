@@ -297,10 +297,120 @@ mainThemeMeasures = [
     ]
 ]
 
-// playTimer()
-for (let i: number = 0; i < 2; i++) {
-    playMainTheme()
-    music.play(mml.playable(
-        mml.track(mml.Dog, "P1")
-    ), music.PlaybackMode.UntilDone)
+interface Point {
+    x: number
+    y: number
+}   // interface Point
+
+// https://lodev.org/cgtutor/floodfill.html
+function floodScanline(img: Image, x: number, y: number, c: number) {
+    let bgColor: number = img.getPixel(x, y)
+    if (bgColor === c) {
+        return
+    }   // if (img.getPixel(x, y) === c)
+
+    let x1: number
+    let spanAbove: boolean
+    let spanBelow: boolean
+    let stack: Point[] = [{ x: x, y: y }]
+    while (stack.length > 0) {
+        let p: Point = stack.pop()
+        x1 = p.x
+        while (x1 >= 0 && img.getPixel(x1, p.y) === bgColor) {
+            x1--
+        }   // while (x1 >= 0 ...)
+        x1++
+        spanAbove = false
+        spanBelow = false
+        while (x1 < img.width && img.getPixel(x1, p.y) === bgColor) {
+            img.setPixel(x1, p.y, c)
+            if (!spanAbove && p.y > 0 && img.getPixel(x1, p.y - 1) === bgColor) {
+                stack.push({ x: x1, y: p.y - 1 })
+                spanAbove = true
+            } else if (spanAbove && p.y > 0 && img.getPixel(x1, p.y - 1) !== bgColor) {
+                spanAbove = false
+            }   // if (! spanAbove ...)
+
+            if (!spanBelow && p.y < img.height - 1 && img.getPixel(x1, p.y + 1) === bgColor) {
+                stack.push({ x: x1, y: p.y + 1 })
+                spanBelow = true
+            } else if (spanBelow && p.y < img.height - 1 && img.getPixel(x1, p.y + 1) !== bgColor) {
+                spanBelow = false
+            }   // if (! spanBelow ...)
+            x1++
+        }   // while (x1 < img.width && ...)
+        // scene.setBackgroundImage(img)
+        // pause(50)
+    }   // while (stack)
+}   // floodScanline()
+
+function runOpening(): void {
+    for (let i: number = 0; i < 2; i++) {
+        playMainTheme()
+        music.play(mml.playable(
+            mml.track(mml.Dog, "P1")
+        ), music.PlaybackMode.UntilDone)
+    }
 }
+
+function drawClock(i: Image, percent: number) {
+    let c: number = i.width / 2
+    i.fill(0)
+    i.fillCircle(c, c, c, 8)
+    i.fillCircle(c, c, c - 2, 1)
+    i.drawLine(c, c, c, 0, 8)
+    /**
+     * 100   percent
+     * --- = -------
+     * 2pi    angle
+     * 
+     * Need to back out a quarter-turn to the angle.
+     * 
+     *         pi * percent   pi
+     * angle = ------------ - --
+     *              50         2
+     * 
+     * x = cos(angle) * radius + radius
+     * y = sin(angle) * radius + radius
+     */
+    if (percent > 0) {
+        let angle: number = Math.PI * (percent - 25) / 50
+        let x: number = 60 * (Math.cos(angle) + 1)
+        let y: number = 60 * (Math.sin(angle) + 1)
+        i.drawLine(c, c, x, y, 8)
+        if (percent > 0.5) {
+            floodScanline(i, c + 2, 4, 8)
+        }
+    }
+}
+
+let clockRunning: boolean = false
+let clockImage: Image = image.create(120, 120)
+let startTime: number = 0
+
+function startClock(): void {
+    let s: Sprite = sprites.create(clockImage, 0)
+    drawClock(clockImage, 100)
+    clockRunning = true
+    startTime = game.runtime()
+}
+
+let timerLength: number = 30
+game.onUpdate(() => {
+    if (clockRunning) {
+        let elapsed: number = (game.runtime() - startTime) / 1000
+        if (elapsed < timerLength) {
+            let p: number = elapsed / timerLength * 100
+            info.setScore(Math.floor(elapsed))
+            drawClock(clockImage, p)
+        } else {
+            music.play(music.melodyPlayable(music.buzzer), music.PlaybackMode.UntilDone)
+            clockRunning = false
+        }
+    }
+})
+
+// playTimer()
+// runOpening()
+scene.setBackgroundColor(9)
+startClock()
