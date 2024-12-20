@@ -410,7 +410,7 @@ game.onUpdate(() => {
     }
 })
 
-// playTimer()
-// runOpening()
 scene.setBackgroundColor(9)
-startClock()
+runOpening()
+// playTimer()
+// startClock()
