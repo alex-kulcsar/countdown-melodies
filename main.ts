@@ -56,12 +56,12 @@ const COUNTDOWN_MML: string[][] = [
     ],
     // Measure 6
     [
-        "L16 O4 P8.>C<P P P P B-4 A4",
-        "L16 O4 P8. G P G P A F4  F4",
-        "L16 O4 P8. E P E P E D4  C4",
-        "L16 O4 C8. C P C P C<B-4 A4",
-        "L16 O3 C   C P C     E-4 E-4",
-        "L16 O2 C   C P C     E-4 E-4",
+        "L16 O4 P8. > C<P P P P B-4 A4",
+        "L16 O4 P8.   G P G P A F4  F4",
+        "L16 O4 P8.   E P E P E D4  C4",
+        "L16 O4 C8.   C P C P C<B-4 A4",
+        "L16 O3 C C P C E-8 E-8<B-4F-4",
+        "L16 O2 C C P C E-8 E-8<B-4F-4",
     ],
     // Measure 7
     [
@@ -92,12 +92,12 @@ const COUNTDOWN_MML: string[][] = [
     ],
     // Measure 10
     [
-        "L16 O4 P8.>C<P P P P B-4 A4",
-        "L16 O4 P8. G P G P A F4  F4",
-        "L16 O4 P8. E P E P E D4  C4",
-        "L16 O4 C8. C P C P C<B-4 A4",
-        "L16 O3 C   C P C     E-4 E-4",
-        "L16 O2 C   C P C     E-4 E-4",
+        "L16 O4 P8. > C<P P P P B-4 A4",
+        "L16 O4 P8.   G P G P A F4  F4",
+        "L16 O4 P8.   E P E P E D4  C4",
+        "L16 O4 C8.   C P C P C<B-4 A4",
+        "L16 O3 C C P C E-8 E-8<B-4F-4",
+        "L16 O2 C C P C E-8 E-8<B-4F-4",
     ],
     // Measure 11
     [
